@@ -2,7 +2,6 @@ import React, {useState, useEffect} from "react";
 import ReactDOM from 'react-dom';
 import {decode as htmlEntityDecode} from 'he';
 import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
-import slugify from 'react-slugify';
 
 
 // Parse and transform API response into an associative array
@@ -19,9 +18,7 @@ events.forEach(event => {
 })
 const audienceArray = [...uniqueAudiences].map(audienceString => {
     const label = htmlEntityDecode(audienceString);
-    const value = slugify(label);
-
-    return {label: label, value: value}
+    return {label: label, value: label}
 });
 
 function App() {
@@ -29,7 +26,7 @@ function App() {
     // Searchbox
     const [searchTerm, setSearchTerm] = useState("");
     const [searchResults, setSearchResults] = useState([]);
-    const handleChange = e => {
+    const textSearch = e => {
         setSearchTerm(e.target.value);
     };
     useEffect(() => {
@@ -40,18 +37,38 @@ function App() {
     }, [searchTerm]);
 
 
+    // Checkboxes
+    const [selectedAudiences, setSelectedAudiences] = useState([]);
+    useEffect(() => {
+        setSelectedAudiences(selectedAudiences);
+    }, [selectedAudiences]);
+
     return (
         <div className="App">
             <input
                 type="text"
                 placeholder="Search"
                 value={searchTerm}
-                onChange={handleChange}
+                onChange={textSearch}
             />
 
 
-            <ReactMultiSelectCheckboxes options={audienceArray}/>
+            <ReactMultiSelectCheckboxes
+                defaultValue={selectedAudiences}
+                options={audienceArray}
+                onChange={setSelectedAudiences}
+                placeholderButtonLabel="Audiences"
+                isSearchable={false}
+            />
 
+            <h1>Audiences</h1>
+            <ul>
+                {selectedAudiences.map(item => (
+                    <li key={item.value}>{item.label}</li>
+                ))}
+            </ul>
+
+            <h1>Values</h1>
             <ul>
                 {searchResults.map(item => (
                     <li key={item.nid}>{item.title}</li>
