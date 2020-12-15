@@ -20,7 +20,7 @@ events.forEach(event => {
 // Figure out valid audiences
 const validAudiences = [...uniqueAudiences].map(audienceString => {
     const label = htmlEntityDecode(audienceString); // Some of the audience names are HTML encoded (ampersands, etc.)
-    return {label: label, value: label} // The format expected by ReactMultiSelectCheckboxes
+    return {label: label, value: audienceString} // The format expected by ReactMultiSelectCheckboxes
 });
 
 
@@ -35,7 +35,7 @@ events.forEach(event => {
 
 const validTopics = [...uniqueTopics].map(topicString => {
     const label = htmlEntityDecode(topicString); // Some of the audience names are HTML encoded (ampersands, etc.)
-    return {label: label, value: label} // The format expected by ReactMultiSelectCheckboxes
+    return {label: label, value: topicString} // The format expected by ReactMultiSelectCheckboxes
 });
 
 
@@ -54,10 +54,15 @@ function App() {
     // Topics
     const [selectedTopics, setSelectedTopics] = useState([]);
 
+    // Online only
+    const [onlineOnly, setOnlineOnly] = useState(false);
+    const onlineOnlyHandler = () => setOnlineOnly(!onlineOnly);
+
+    let filteredEvents = events;
+
     // The filtering algorithm
     useEffect(() => {
             // We'll whittle down the events one filter at a time.
-            let filteredEvents = events;
 
             // Filter audiences
             if (selectedAudiences.length > 0) {
@@ -92,9 +97,12 @@ function App() {
                 filteredEvents = fuse.search(searchTerm).map(result => result.item);
             }
 
+            // Online events only
+            if (onlineOnly) filteredEvents = filteredEvents.filter(event => event.online_event === "1");
+
             setSearchResults(filteredEvents);
 
-        }, [selectedAudiences, selectedTopics, searchTerm]
+        }, [selectedAudiences, selectedTopics, searchTerm, onlineOnly]
     );
 
     return (
@@ -123,21 +131,24 @@ function App() {
                 isSearchable={false}
             />
 
-            <h1>Selected Audiences</h1>
-            <ul>
-                {selectedAudiences.map(item => (
-                    <li key={item.value}>{item.label}</li>
-                ))}
-            </ul>
+            <label>Online
+                <input
+                    name="onlineOnly"
+                    type="checkbox"
+                    checked={onlineOnly}
+                    onChange={onlineOnlyHandler}
+                />
+            </label>
 
             <h1>Matching Events</h1>
             <ul>
                 {searchResults.map(item => (
                     <li key={item.nid}> {item.title}
                         <ul>
-                             <li>Audiences: {item.audience}</li>
-                             <li>Topics: {item.topics}</li>
-                             <li>Message: {item.message}</li>
+                            <li>Online? {item.online_event === "1" ? 'Online' : 'No'}</li>
+                            <li>Audiences: {item.audience}</li>
+                            <li>Topics: {item.topics}</li>
+                            <li>Message: {item.message}</li>
                         </ul>
                     </li>
                 ))}
