@@ -58,11 +58,11 @@ function App() {
     const [onlineOnly, setOnlineOnly] = useState(false);
     const onlineOnlyHandler = () => setOnlineOnly(!onlineOnly);
 
-    let filteredEvents = events;
 
     // The filtering algorithm
     useEffect(() => {
             // We'll whittle down the events one filter at a time.
+            let filteredEvents = events;
 
             // Filter audiences
             if (selectedAudiences.length > 0) {
