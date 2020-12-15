@@ -22,26 +22,38 @@ const audienceArray = [...uniqueAudiences].map(audienceString => {
 });
 
 function App() {
+    const [searchResults, setSearchResults] = useState([]);
 
     // Searchbox
     const [searchTerm, setSearchTerm] = useState("");
-    const [searchResults, setSearchResults] = useState([]);
     const textSearch = e => {
         setSearchTerm(e.target.value);
     };
-    useEffect(() => {
-        const results = events.filter(event =>
-            event.title.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        setSearchResults(results);
-    }, [searchTerm]);
-
 
     // Checkboxes
     const [selectedAudiences, setSelectedAudiences] = useState([]);
+
     useEffect(() => {
-        setSelectedAudiences(selectedAudiences);
-    }, [selectedAudiences]);
+            const filteredEvents = events
+
+                // First filter selected audiences
+                .filter(event => selectedAudiences.length === 0 ||
+
+                    // Array.some returns true as soon as the condition matches one element of the array, then stops
+                    selectedAudiences.some(audience => {
+                        if (event.audience) {
+                            return event.audience.includes(audience.value);
+                        }
+                    })
+                )
+
+                // Then do a keyword match
+                .filter(event => !searchTerm || event.title.toLowerCase().includes(searchTerm.toLowerCase()));
+
+            setSearchResults(filteredEvents);
+
+        }, [selectedAudiences, searchTerm]
+    );
 
     return (
         <div className="App">
@@ -61,17 +73,17 @@ function App() {
                 isSearchable={false}
             />
 
-            <h1>Audiences</h1>
+            <h1>Selected Audiences</h1>
             <ul>
                 {selectedAudiences.map(item => (
                     <li key={item.value}>{item.label}</li>
                 ))}
             </ul>
 
-            <h1>Values</h1>
+            <h1>Matching Events</h1>
             <ul>
                 {searchResults.map(item => (
-                    <li key={item.nid}>{item.title}</li>
+                    <li key={item.nid}>{item.title} ({item.audience})</li>
                 ))}
             </ul>
         </div>
