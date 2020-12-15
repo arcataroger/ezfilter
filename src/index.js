@@ -23,31 +23,62 @@ const validAudiences = [...uniqueAudiences].map(audienceString => {
     return {label: label, value: label} // The format expected by ReactMultiSelectCheckboxes
 });
 
+
+// Figure out valid topics
+// Calculate available audiences based on API response
+let uniqueTopics = new Set(); // To ensure uniqueness
+events.forEach(event => {
+    if (event.topics) {
+        event.topics.split('|').map(topic => uniqueTopics.add(topic))
+    }
+})
+
+const validTopics = [...uniqueTopics].map(topicString => {
+    const label = htmlEntityDecode(topicString); // Some of the audience names are HTML encoded (ampersands, etc.)
+    return {label: label, value: label} // The format expected by ReactMultiSelectCheckboxes
+});
+
+
 function App() {
     const [searchResults, setSearchResults] = useState([]);
 
-    // Searchbox
+    // Title & description keyword search
     const [searchTerm, setSearchTerm] = useState("");
     const textSearch = e => {
         setSearchTerm(e.target.value);
     };
 
-    // Checkboxes
+    // Audiences
     const [selectedAudiences, setSelectedAudiences] = useState([]);
 
+    // Topics
+    const [selectedTopics, setSelectedTopics] = useState([]);
+
+    // The filtering algorithm
     useEffect(() => {
             // We'll whittle down the events one filter at a time.
             let filteredEvents = events;
 
-            // First filter selected audiences
+            // Filter audiences
             if (selectedAudiences.length > 0) {
                 filteredEvents = filteredEvents.filter(event =>
                     // Array.some returns true as soon as the condition matches one element of the array, then stops
                     selectedAudiences.some(audience => {
                         if (event.audience) {
                             return event.audience.includes(audience.value);
-                        }
-                        else return false;
+                        } else return false;
+                    })
+                )
+            }
+
+            // Filter topics
+            if (selectedTopics.length > 0) {
+                filteredEvents = filteredEvents.filter(event =>
+                    // Array.some returns true as soon as the condition matches one element of the array, then stops
+                    selectedTopics.some(topic => {
+                        if (event.topics) {
+                            return event.topics.includes(topic.value);
+                        } else return false;
                     })
                 )
             }
@@ -63,7 +94,7 @@ function App() {
 
             setSearchResults(filteredEvents);
 
-        }, [selectedAudiences, searchTerm]
+        }, [selectedAudiences, selectedTopics, searchTerm]
     );
 
     return (
@@ -84,6 +115,14 @@ function App() {
                 isSearchable={false}
             />
 
+            <ReactMultiSelectCheckboxes
+                defaultValue={selectedTopics}
+                options={validTopics}
+                onChange={setSelectedTopics}
+                placeholderButtonLabel="Topics"
+                isSearchable={false}
+            />
+
             <h1>Selected Audiences</h1>
             <ul>
                 {selectedAudiences.map(item => (
@@ -94,7 +133,13 @@ function App() {
             <h1>Matching Events</h1>
             <ul>
                 {searchResults.map(item => (
-                    <li key={item.nid}>{item.title} ({item.audience}) - {item.message}</li>
+                    <li key={item.nid}> {item.title}
+                        <ul>
+                             <li>Audiences: {item.audience}</li>
+                             <li>Topics: {item.topics}</li>
+                             <li>Message: {item.message}</li>
+                        </ul>
+                    </li>
                 ))}
             </ul>
         </div>
