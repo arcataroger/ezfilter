@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="be8296ce-65ab-467d-a35f-534a405f6ee5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +71,7 @@
       <option name="presentableId" value="Default" />
       <updated>1607976435831</updated>
       <workItem from="1607976436889" duration="7794000" />
-      <workItem from="1608043942274" duration="6271000" />
+      <workItem from="1608043942274" duration="8230000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1607981328942</created>
@@ -92,7 +94,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607984522979</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Basic multi-filter logic">
+      <created>1608050275732</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1608050275732</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -115,6 +124,7 @@
     <MESSAGE value="Initial commit" />
     <MESSAGE value="Populating checkbox" />
     <MESSAGE value="Multicheckbox... this prob won't work" />
-    <option name="LAST_COMMIT_MESSAGE" value="Multicheckbox... this prob won't work" />
+    <MESSAGE value="Basic multi-filter logic" />
+    <option name="LAST_COMMIT_MESSAGE" value="Basic multi-filter logic" />
   </component>
 </project>

@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import ReactDOM from 'react-dom';
 import {decode as htmlEntityDecode} from 'he';
 import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
-
+import Fuse from 'fuse.js';
 
 // Parse and transform API response into an associative array
 import apiResponse from "./apiResponse";
@@ -16,9 +16,11 @@ events.forEach(event => {
         event.audience.split('|').map(audience => uniqueAudiences.add(audience))
     }
 })
-const audienceArray = [...uniqueAudiences].map(audienceString => {
-    const label = htmlEntityDecode(audienceString);
-    return {label: label, value: label}
+
+// Figure out valid audiences
+const validAudiences = [...uniqueAudiences].map(audienceString => {
+    const label = htmlEntityDecode(audienceString); // Some of the audience names are HTML encoded (ampersands, etc.)
+    return {label: label, value: label} // The format expected by ReactMultiSelectCheckboxes
 });
 
 function App() {
@@ -34,21 +36,30 @@ function App() {
     const [selectedAudiences, setSelectedAudiences] = useState([]);
 
     useEffect(() => {
-            const filteredEvents = events
+            // We'll whittle down the events one filter at a time.
+            let filteredEvents = events;
 
-                // First filter selected audiences
-                .filter(event => selectedAudiences.length === 0 ||
-
+            // First filter selected audiences
+            if (selectedAudiences.length > 0) {
+                filteredEvents = filteredEvents.filter(event =>
                     // Array.some returns true as soon as the condition matches one element of the array, then stops
                     selectedAudiences.some(audience => {
                         if (event.audience) {
                             return event.audience.includes(audience.value);
                         }
+                        else return false;
                     })
                 )
+            }
 
-                // Then do a keyword match
-                .filter(event => !searchTerm || event.title.toLowerCase().includes(searchTerm.toLowerCase()));
+            // Then do a fuzzy keyword match
+            if (searchTerm) {
+                const fuse = new Fuse(filteredEvents, {
+                    keys: ['title', 'message']
+                })
+
+                filteredEvents = fuse.search(searchTerm).map(result => result.item);
+            }
 
             setSearchResults(filteredEvents);
 
@@ -67,7 +78,7 @@ function App() {
 
             <ReactMultiSelectCheckboxes
                 defaultValue={selectedAudiences}
-                options={audienceArray}
+                options={validAudiences}
                 onChange={setSelectedAudiences}
                 placeholderButtonLabel="Audiences"
                 isSearchable={false}
@@ -83,7 +94,7 @@ function App() {
             <h1>Matching Events</h1>
             <ul>
                 {searchResults.map(item => (
-                    <li key={item.nid}>{item.title} ({item.audience})</li>
+                    <li key={item.nid}>{item.title} ({item.audience}) - {item.message}</li>
                 ))}
             </ul>
         </div>
