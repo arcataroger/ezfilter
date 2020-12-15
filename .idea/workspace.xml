@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="be8296ce-65ab-467d-a35f-534a405f6ee5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +31,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
@@ -83,7 +84,7 @@
       <option name="presentableId" value="Default" />
       <updated>1607976435831</updated>
       <workItem from="1607976436889" duration="7794000" />
-      <workItem from="1608043942274" duration="11365000" />
+      <workItem from="1608043942274" duration="11661000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1607981328942</created>
@@ -134,7 +135,21 @@
       <option name="project" value="LOCAL" />
       <updated>1608055634988</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="React is griping about variable init location">
+      <created>1608055757432</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1608055757432</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Symlink docs to build for github pages">
+      <created>1608055923115</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1608055923115</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -154,6 +169,7 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Initial commit" />
     <MESSAGE value="Populating checkbox" />
     <MESSAGE value="Multicheckbox... this prob won't work" />
@@ -161,6 +177,8 @@
     <MESSAGE value="Basic fuzzy text search" />
     <MESSAGE value="Added topic" />
     <MESSAGE value="Online filter, bug fix for HTML entities values vs labels" />
-    <option name="LAST_COMMIT_MESSAGE" value="Online filter, bug fix for HTML entities values vs labels" />
+    <MESSAGE value="React is griping about variable init location" />
+    <MESSAGE value="Symlink docs to build for github pages" />
+    <option name="LAST_COMMIT_MESSAGE" value="Symlink docs to build for github pages" />
   </component>
 </project>
