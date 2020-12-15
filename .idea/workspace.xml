@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="be8296ce-65ab-467d-a35f-534a405f6ee5" name="Default Changelist" comment="Add build to git">
+    <list default="true" id="be8296ce-65ab-467d-a35f-534a405f6ee5" name="Default Changelist" comment="trying again">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,6 +25,7 @@
   </component>
   <component name="ProjectId" id="1lf7kaL03787yooJ0onR8dtmtj3" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="false" id="Update" />
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -84,7 +86,7 @@
       <option name="presentableId" value="Default" />
       <updated>1607976435831</updated>
       <workItem from="1607976436889" duration="7794000" />
-      <workItem from="1608043942274" duration="12071000" />
+      <workItem from="1608043942274" duration="12547000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1607981328942</created>
@@ -156,7 +158,21 @@
       <option name="project" value="LOCAL" />
       <updated>1608055999976</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Reversing symlink doc/build">
+      <created>1608061891561</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1608061891561</updated>
+    </task>
+    <task id="LOCAL-00012" summary="trying again">
+      <created>1608062023108</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1608062023108</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -187,6 +203,8 @@
     <MESSAGE value="React is griping about variable init location" />
     <MESSAGE value="Symlink docs to build for github pages" />
     <MESSAGE value="Add build to git" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add build to git" />
+    <MESSAGE value="Reversing symlink doc/build" />
+    <MESSAGE value="trying again" />
+    <option name="LAST_COMMIT_MESSAGE" value="trying again" />
   </component>
 </project>
