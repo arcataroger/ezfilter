@@ -10,34 +10,20 @@ import apiResponse from "./apiResponse";
 
 const events = apiResponse.nodes.map(v => v.node);
 
-// Calculate available audiences based on API response
-let uniqueAudiences = new Set(); // To ensure uniqueness
-events.forEach(event => {
-    if (event.audience) {
-        event.audience.split('|').map(audience => uniqueAudiences.add(audience))
-    }
+let parsed=[];
+['audience', 'topics'].forEach(key => {
+    let uniqueAudiences = new Set(); // To ensure uniqueness
+    events.forEach(event => {
+        if (event[key]) {
+            event[key].split('|').map(item => uniqueAudiences.add(item))
+        }
+    })
+
+    parsed[key] = [...uniqueAudiences].map(audienceString => {
+        const label = htmlEntityDecode(audienceString); // Some of the audience names are HTML encoded (ampersands, etc.)
+        return {label: label, value: audienceString} // The format expected by ReactMultiSelectCheckboxes
+    });
 })
-
-// Figure out valid audiences
-const validAudiences = [...uniqueAudiences].map(audienceString => {
-    const label = htmlEntityDecode(audienceString); // Some of the audience names are HTML encoded (ampersands, etc.)
-    return {label: label, value: audienceString} // The format expected by ReactMultiSelectCheckboxes
-});
-
-
-// Figure out valid topics
-// Calculate available audiences based on API response
-let uniqueTopics = new Set(); // To ensure uniqueness
-events.forEach(event => {
-    if (event.topics) {
-        event.topics.split('|').map(topic => uniqueTopics.add(topic))
-    }
-})
-
-const validTopics = [...uniqueTopics].map(topicString => {
-    const label = htmlEntityDecode(topicString); // Some of the audience names are HTML encoded (ampersands, etc.)
-    return {label: label, value: topicString} // The format expected by ReactMultiSelectCheckboxes
-});
 
 
 function App() {
@@ -118,7 +104,7 @@ function App() {
 
             <ReactMultiSelectCheckboxes
                 defaultValue={selectedAudiences}
-                options={validAudiences}
+                options={parsed['audience']}
                 onChange={setSelectedAudiences}
                 placeholderButtonLabel="Audiences"
                 isSearchable={false}
@@ -126,7 +112,7 @@ function App() {
 
             <ReactMultiSelectCheckboxes
                 defaultValue={selectedTopics}
-                options={validTopics}
+                options={parsed['topics']}
                 onChange={setSelectedTopics}
                 placeholderButtonLabel="Topics"
                 isSearchable={false}
