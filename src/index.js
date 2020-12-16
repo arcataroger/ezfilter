@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {decode as htmlEntityDecode} from 'he';
 import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 import Fuse from 'fuse.js';
+import './App.css';
 
 // Parse and transform API response into an associative array
 import apiResponse from "./apiResponse";
@@ -140,7 +141,7 @@ function App() {
                 />
             </label>
 
-            <h1>Matching Events</h1>
+            <h1>Matching Events ({searchResults.length})</h1>
             <ul>
                 {searchResults.map(item => (
                     <li key={item.nid}> {item.title}
