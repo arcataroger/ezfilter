@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/docs/static/css/main.3eab5dcb.chunk.css",
-    "main.js": "/docs/static/js/main.511e133a.chunk.js",
-    "main.js.map": "/docs/static/js/main.511e133a.chunk.js.map",
-    "runtime-main.js": "/docs/static/js/runtime-main.f561cc33.js",
-    "runtime-main.js.map": "/docs/static/js/runtime-main.f561cc33.js.map",
-    "static/js/2.e095684c.chunk.js": "/docs/static/js/2.e095684c.chunk.js",
-    "static/js/2.e095684c.chunk.js.map": "/docs/static/js/2.e095684c.chunk.js.map",
-    "index.html": "/docs/index.html",
-    "static/css/main.3eab5dcb.chunk.css.map": "/docs/static/css/main.3eab5dcb.chunk.css.map",
-    "static/js/2.e095684c.chunk.js.LICENSE.txt": "/docs/static/js/2.e095684c.chunk.js.LICENSE.txt"
+    "main.css": "/ezfilter/static/css/main.3eab5dcb.chunk.css",
+    "main.js": "/ezfilter/static/js/main.511e133a.chunk.js",
+    "main.js.map": "/ezfilter/static/js/main.511e133a.chunk.js.map",
+    "runtime-main.js": "/ezfilter/static/js/runtime-main.5a262817.js",
+    "runtime-main.js.map": "/ezfilter/static/js/runtime-main.5a262817.js.map",
+    "static/js/2.e095684c.chunk.js": "/ezfilter/static/js/2.e095684c.chunk.js",
+    "static/js/2.e095684c.chunk.js.map": "/ezfilter/static/js/2.e095684c.chunk.js.map",
+    "index.html": "/ezfilter/index.html",
+    "static/css/main.3eab5dcb.chunk.css.map": "/ezfilter/static/css/main.3eab5dcb.chunk.css.map",
+    "static/js/2.e095684c.chunk.js.LICENSE.txt": "/ezfilter/static/js/2.e095684c.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.f561cc33.js",
+    "static/js/runtime-main.5a262817.js",
     "static/js/2.e095684c.chunk.js",
     "static/css/main.3eab5dcb.chunk.css",
     "static/js/main.511e133a.chunk.js"
