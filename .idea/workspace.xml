@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="be8296ce-65ab-467d-a35f-534a405f6ee5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/static/js/runtime-main.5a262817.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/static/js/runtime-main.5a262817.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +101,7 @@
       <workItem from="1608043942274" duration="12547000" />
       <workItem from="1608080540347" duration="1782000" />
       <workItem from="1608138648469" duration="599000" />
-      <workItem from="1616510658492" duration="383000" />
+      <workItem from="1616510658492" duration="498000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1607981328942</created>
@@ -212,7 +215,14 @@
       <option name="project" value="LOCAL" />
       <updated>1616510984712</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Changing output folder">
+      <created>1616511055258</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1616511055258</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -250,7 +260,8 @@
     <MESSAGE value="Consolidated parser code" />
     <MESSAGE value="Publishing for preview" />
     <MESSAGE value="Updated published build and title" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated published build and title" />
+    <MESSAGE value="Changing output folder" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changing output folder" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
