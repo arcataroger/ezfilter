@@ -1,4 +1,6 @@
-const apiResponse = {
+import {decode as htmlEntityDecode} from 'he'; // For rendering HTML entities inside description strings
+
+const D7Output = {
     "nodes": [{
         "node": {
             "nid": "31439",
@@ -110,7 +112,7 @@ const apiResponse = {
             "path": "/our-events/sue-science-saturdays-urban-ecology-wilder-side-city",
             "start_date": "1618671600",
             "end_date": "1618678800",
-            "sold_out": "0",
+            "sold_out": "1",
             "online_event": "1",
             "message": "<p>Families spend their Saturday morning online with Field scientists and SUE the T. rex for a hands-on look at the museum.</p>",
             "topics": "Dinosaurs",
@@ -123,7 +125,7 @@ const apiResponse = {
             "path": "/our-events/sue-t-rex-virtual-tour-national-dinosaur-day",
             "start_date": "1622579400",
             "end_date": "1622583000",
-            "sold_out": "0",
+            "sold_out": "1",
             "online_event": "0",
             "message": "<p>Celebrate <em>T. rex</em>&nbsp;and other famous dinosaurs that lived before and during SUE's time.</p>",
             "topics": null,
@@ -131,5 +133,41 @@ const apiResponse = {
         }
     }], "pager": {"pages": 1, "page": 0, "count": 10, "limit": 12}
 };
+
+let apiResponse = D7Output.nodes.map(entry => {
+
+    const node = entry.node;
+
+    // Typecast strings into arrays
+    ['audience','topics'].forEach(key => {
+        if(node[key]) {
+            node[key] = htmlEntityDecode(node[key]);
+            node[key] = node[key].split('|');
+        }
+    });
+
+    // Type strings into booleans
+    ['sold_out', 'online_event'].forEach(key =>
+    {
+        switch(node[key]) {
+            case true:
+            case 'true':
+            case '1':
+            case 1:
+                node[key] = true;
+                break;
+
+            default:
+                node[key] = false;
+        }
+    });
+
+    // Parse HTML entities from Drupal's output
+    if(node.message) {
+        node.message = htmlEntityDecode(node.message);
+    }
+
+    return node;
+});
 
 export default apiResponse;

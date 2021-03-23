@@ -1,26 +1,32 @@
 import React, {useState, useEffect} from "react";
 import ReactDOM from 'react-dom';
-import {decode as htmlEntityDecode} from 'he';
 import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
-import Fuse from 'fuse.js';
+import Fuse from 'fuse.js'; // Fuzzy keyword search
 import './App.css';
 
-// Parse and transform API response into an associative array
-import apiResponse from "./apiResponse";
+import apiResponse from "./apiResponse.js"; // Parse and transform mock API response into an array
 
-const events = apiResponse.nodes.map(v => v.node);
+// Which keys do we want to filter by?
+const options = {
+    multiSelectKeys: ['audience', 'topics'], // Dropdowns + checkboxes
+    booleanKeys: ['sold_out', 'online_event'], // Single checkboxes
+    enableSearch: true,
+};
 
-let parsed=[];
-['audience', 'topics'].forEach(key => {
+
+const events = apiResponse;
+
+let parsed = [];
+options.multiSelectKeys.forEach(key => {
     let uniqueAudiences = new Set(); // To ensure uniqueness
     events.forEach(event => {
         if (event[key]) {
-            event[key].split('|').map(item => uniqueAudiences.add(item))
+            event[key].map(item => uniqueAudiences.add(item))
         }
     })
 
     parsed[key] = [...uniqueAudiences].map(audienceString => {
-        const label = htmlEntityDecode(audienceString); // Some of the audience names are HTML encoded (ampersands, etc.)
+        const label = audienceString; // Some of the audience names are HTML encoded (ampersands, etc.)
         return {label: label, value: audienceString} // The format expected by ReactMultiSelectCheckboxes
     });
 })
@@ -37,9 +43,6 @@ function App() {
 
     // Audiences
     const [selectedAudiences, setSelectedAudiences] = useState([]);
-
-    // Topics
-    const [selectedTopics, setSelectedTopics] = useState([]);
 
     // Online only
     const [onlineOnly, setOnlineOnly] = useState(false);
@@ -63,17 +66,6 @@ function App() {
                 )
             }
 
-            // Filter topics
-            if (selectedTopics.length > 0) {
-                filteredEvents = filteredEvents.filter(event =>
-                    // Array.some returns true as soon as the condition matches one element of the array, then stops
-                    selectedTopics.some(topic => {
-                        if (event.topics) {
-                            return event.topics.includes(topic.value);
-                        } else return false;
-                    })
-                )
-            }
 
             // Then do a fuzzy keyword match
             if (searchTerm) {
@@ -85,21 +77,24 @@ function App() {
             }
 
             // Online events only
-            if (onlineOnly) filteredEvents = filteredEvents.filter(event => event.online_event === "1");
+            if (onlineOnly) filteredEvents = filteredEvents.filter(event => event.online_event);
 
             setSearchResults(filteredEvents);
 
-        }, [selectedAudiences, selectedTopics, searchTerm, onlineOnly]
+        }, [selectedAudiences, searchTerm, onlineOnly]
     );
 
     return (
         <div className="App">
-            <input
-                type="text"
-                placeholder="Search"
-                value={searchTerm}
-                onChange={textSearch}
-            />
+            {
+                options.enableSearch &&
+                <input
+                    type="text"
+                    placeholder="Search"
+                    value={searchTerm}
+                    onChange={textSearch}
+                />
+            }
 
 
             <ReactMultiSelectCheckboxes
@@ -107,14 +102,6 @@ function App() {
                 options={parsed['audience']}
                 onChange={setSelectedAudiences}
                 placeholderButtonLabel="Audiences"
-                isSearchable={false}
-            />
-
-            <ReactMultiSelectCheckboxes
-                defaultValue={selectedTopics}
-                options={parsed['topics']}
-                onChange={setSelectedTopics}
-                placeholderButtonLabel="Topics"
                 isSearchable={false}
             />
 
@@ -127,15 +114,15 @@ function App() {
                 />
             </label>
 
-            <h1>Matching Events ({searchResults.length})</h1>
+            <h1>Showing {searchResults.length} event(s) out of {events.length} total</h1>
             <ul>
                 {searchResults.map(item => (
                     <li key={item.nid}> {item.title}
                         <ul>
-                            <li>Online? {item.online_event === "1" ? 'Online' : 'No'}</li>
-                            <li>Audiences: {item.audience}</li>
-                            <li>Topics: {item.topics}</li>
-                            <li>Message: {item.message}</li>
+                            <li>Online? {item.online_event ? 'Yes' : 'No'}</li>
+                            <li>Audiences: {item.audience && item.audience.join(', ')}</li>
+                            <li>Topics: {item.topics && item.topics.join(', ')}</li>
+                            <p dangerouslySetInnerHTML={{__html: item.message}} />
                         </ul>
                     </li>
                 ))}
