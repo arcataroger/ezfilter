@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from "react";
 import ReactDOM from 'react-dom';
-import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 import Fuse from 'fuse.js'; // Fuzzy keyword search
 import './App.css';
 
@@ -8,29 +7,61 @@ import apiResponse from "./apiResponse.js"; // Parse and transform mock API resp
 
 // Which keys do we want to filter by?
 const options = {
-    multiSelectKeys: ['audience', 'topics'], // Dropdowns + checkboxes
-    booleanKeys: ['sold_out', 'online_event'], // Single checkboxes
-    enableSearch: true,
+    multiselectFields: {audience: 'Audiences', topics: 'Topics'}, // Multiselect filters (dropdowns and checkboxes)
+    booleanFields: ['sold_out', 'online_event'], // Boolean filters (single checkboxes)
+    enableKeywordSearch: true, // Turn keyword search on or off
+    keywordSearchFields: ['title', 'message'], // Which keys to perform keyword search on
 };
 
 
 const events = apiResponse;
 
-let parsed = [];
-options.multiSelectKeys.forEach(key => {
-    let uniqueAudiences = new Set(); // To ensure uniqueness
+const taxonomies = {};
+Object.keys(options.multiselectFields).forEach(key => {
+    let uniqueOptions = new Set(); // To ensure uniqueness
     events.forEach(event => {
         if (event[key]) {
-            event[key].map(item => uniqueAudiences.add(item))
+            event[key].map(item => uniqueOptions.add(item))
         }
     })
 
-    parsed[key] = [...uniqueAudiences].map(audienceString => {
-        const label = audienceString; // Some of the audience names are HTML encoded (ampersands, etc.)
-        return {label: label, value: audienceString} // The format expected by ReactMultiSelectCheckboxes
+    taxonomies[key] = [...uniqueOptions].map(filterString => {
+        return {label: filterString, value: filterString} // The format expected by ReactMultiSelectCheckboxes
     });
 })
 
+console.log('taxonomies', taxonomies);
+
+// From https://www.30secondsofcode.org/react/s/multiselect-checkbox
+const MultiselectCheckbox = ({options, onChange}) => {
+    const [data, setData] = useState(options);
+
+    const toggle = index => {
+        const newData = [...data];
+        newData.splice(index, 1, {
+            label: data[index].label,
+            checked: !data[index].checked
+        });
+        setData(newData);
+        onChange(newData.filter(x => x.checked));
+    };
+
+    return (
+        <>
+            {data.map((item, index) => (
+                <label key={item.label}>
+                    <input
+                        readOnly
+                        type="checkbox"
+                        checked={item.checked || false}
+                        onClick={() => toggle(index)}
+                    />
+                    {item.label}
+                </label>
+            ))}
+        </>
+    );
+};
 
 function App() {
     const [searchResults, setSearchResults] = useState([]);
@@ -41,69 +72,62 @@ function App() {
         setSearchTerm(e.target.value);
     };
 
-    // Audiences
-    const [selectedAudiences, setSelectedAudiences] = useState([]);
-
     // Online only
     const [onlineOnly, setOnlineOnly] = useState(false);
     const onlineOnlyHandler = () => setOnlineOnly(!onlineOnly);
 
+    // Taxonomy filters (multiselect checkboxes)
+    const [taxonomyFilters, setTaxonomyFilters] = useState([]);
 
     // The filtering algorithm
     useEffect(() => {
-            // We'll whittle down the events one filter at a time.
-            let filteredEvents = events;
+        let filteredEvents = events;
 
-            // Filter audiences
-            if (selectedAudiences.length > 0) {
-                filteredEvents = filteredEvents.filter(event =>
-                    // Array.some returns true as soon as the condition matches one element of the array, then stops
-                    selectedAudiences.some(audience => {
-                        if (event.audience) {
-                            return event.audience.includes(audience.value);
-                        } else return false;
-                    })
-                )
-            }
+        // Then do a fuzzy keyword match
+        if (searchTerm) {
+            const fuse = new Fuse(filteredEvents, {
+                keys: options.keywordSearchFields
+            })
 
+            filteredEvents = fuse.search(searchTerm).map(result => result.item);
+        }
 
-            // Then do a fuzzy keyword match
-            if (searchTerm) {
-                const fuse = new Fuse(filteredEvents, {
-                    keys: ['title', 'message']
-                })
+        // Online events only
+        if (onlineOnly) filteredEvents = filteredEvents.filter(event => event.online_event);
 
-                filteredEvents = fuse.search(searchTerm).map(result => result.item);
-            }
+        // Multiselect
+        if (taxonomyFilters.length > 0) {
+            console.log(taxonomyFilters, filteredEvents);
+            filteredEvents = filteredEvents.filter(event =>
+                // Array.some returns true as soon as the condition matches one element of the array, then stops
+                taxonomyFilters.some(selected => event.audience && event.audience.includes(selected.label))
+            )
+        }
 
-            // Online events only
-            if (onlineOnly) filteredEvents = filteredEvents.filter(event => event.online_event);
+        setSearchResults(filteredEvents);
 
-            setSearchResults(filteredEvents);
-
-        }, [selectedAudiences, searchTerm, onlineOnly]
-    );
+    }, [searchTerm, onlineOnly, taxonomyFilters]);
 
     return (
         <div className="App">
             {
-                options.enableSearch &&
+                options.enableKeywordSearch &&
                 <input
                     type="text"
-                    placeholder="Search"
+                    placeholder="Search titles & descriptions"
                     value={searchTerm}
                     onChange={textSearch}
                 />
             }
 
-
-            <ReactMultiSelectCheckboxes
-                defaultValue={selectedAudiences}
-                options={parsed['audience']}
-                onChange={setSelectedAudiences}
-                placeholderButtonLabel="Audiences"
-                isSearchable={false}
-            />
+            {Object.keys(taxonomies).map(key => {
+                return <MultiselectCheckbox
+                    options={taxonomies[key]}
+                    onChange={setTaxonomyFilters}
+                    key={key}
+                />
+            })
+            }
 
             <label>Online
                 <input
@@ -117,12 +141,13 @@ function App() {
             <h1>Showing {searchResults.length} event(s) out of {events.length} total</h1>
             <ul>
                 {searchResults.map(item => (
-                    <li key={item.nid}> {item.title}
+                    <li key={item.nid}><h2>{item.title}</h2>
                         <ul>
-                            <li>Online? {item.online_event ? 'Yes' : 'No'}</li>
+                            <li>Online? {String(item.online_event)}</li>
+                            <li>Sold out? {String(item.sold_out)}</li>
                             <li>Audiences: {item.audience && item.audience.join(', ')}</li>
                             <li>Topics: {item.topics && item.topics.join(', ')}</li>
-                            <p dangerouslySetInnerHTML={{__html: item.message}} />
+                            <p dangerouslySetInnerHTML={{__html: item.message}}/>
                         </ul>
                     </li>
                 ))}
