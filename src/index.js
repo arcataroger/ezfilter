@@ -1,39 +1,12 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useMemo} from "react";
 import ReactDOM from 'react-dom';
 import Fuse from 'fuse.js'; // Fuzzy keyword search
 import './App.css';
-
 import apiResponse from "./apiResponse.js"; // Parse and transform mock API response into an array
 
-// Which keys do we want to filter by?
-const options = {
-    multiselectFields: {audience: 'Audiences', topics: 'Topics'}, // Multiselect filters (dropdowns and checkboxes)
-    booleanFields: ['sold_out', 'online_event'], // Boolean filters (single checkboxes)
-    enableKeywordSearch: true, // Turn keyword search on or off
-    keywordSearchFields: ['title', 'message'], // Which keys to perform keyword search on
-};
+function MultiselectCheckbox({options, onChange}) {
+    // From https://www.30secondsofcode.org/react/s/multiselect-checkbox
 
-
-const events = apiResponse;
-
-const taxonomies = {};
-Object.keys(options.multiselectFields).forEach(key => {
-    let uniqueOptions = new Set(); // To ensure uniqueness
-    events.forEach(event => {
-        if (event[key]) {
-            event[key].map(item => uniqueOptions.add(item))
-        }
-    })
-
-    taxonomies[key] = [...uniqueOptions].map(filterString => {
-        return {label: filterString, value: filterString} // The format expected by ReactMultiSelectCheckboxes
-    });
-})
-
-console.log('taxonomies', taxonomies);
-
-// From https://www.30secondsofcode.org/react/s/multiselect-checkbox
-const MultiselectCheckbox = ({options, onChange}) => {
     const [data, setData] = useState(options);
 
     const toggle = index => {
@@ -61,10 +34,36 @@ const MultiselectCheckbox = ({options, onChange}) => {
             ))}
         </>
     );
-};
+}
+
 
 function App() {
-    const [searchResults, setSearchResults] = useState([]);
+    // Which keys do we want to filter by?
+    const options = {
+        multiselectFields: {audience: 'Audiences', topics: 'Topics'}, // Multiselect filters (dropdowns and checkboxes)
+        booleanFields: ['sold_out', 'online_event'], // Boolean filters (single checkboxes)
+        enableKeywordSearch: true, // Turn keyword search on or off
+        keywordSearchFields: ['title', 'message'], // Which keys to perform keyword search on
+    };
+
+
+    const eventsFromAPI = apiResponse;
+
+    const taxonomies = {};
+    Object.keys(options.multiselectFields).forEach(key => {
+        let uniqueOptions = new Set(); // To ensure uniqueness
+        eventsFromAPI.forEach(event => {
+            if (event[key]) {
+                event[key].map(item => uniqueOptions.add(item))
+            }
+        })
+
+        taxonomies[key] = [...uniqueOptions].map(filterString => {
+            return {label: filterString, value: filterString} // The format expected by ReactMultiSelectCheckboxes
+        });
+    })
+
+    console.log('taxonomies', taxonomies);
 
     // Title & description keyword search
     const [searchTerm, setSearchTerm] = useState("");
@@ -80,8 +79,8 @@ function App() {
     const [taxonomyFilters, setTaxonomyFilters] = useState([]);
 
     // The filtering algorithm
-    useEffect(() => {
-        let filteredEvents = events;
+    const searchResults = useMemo(() => {
+        let filteredEvents = eventsFromAPI;
 
         // Then do a fuzzy keyword match
         if (searchTerm) {
@@ -104,8 +103,7 @@ function App() {
             )
         }
 
-        setSearchResults(filteredEvents);
-
+        return filteredEvents;
     }, [searchTerm, onlineOnly, taxonomyFilters]);
 
     return (
@@ -138,7 +136,7 @@ function App() {
                 />
             </label>
 
-            <h1>Showing {searchResults.length} event(s) out of {events.length} total</h1>
+            <h1>Showing {searchResults.length} event(s) out of {eventsFromAPI.length} total</h1>
             <ul>
                 {searchResults.map(item => (
                     <li key={item.nid}><h2>{item.title}</h2>
