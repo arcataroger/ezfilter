@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="be8296ce-65ab-467d-a35f-534a405f6ee5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/DisplayComponent.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/filters.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -22,6 +26,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
   </component>
   <component name="GitSEFilterConfiguration">
     <file-type-list>
@@ -108,6 +113,10 @@
       <workItem from="1617134493461" duration="4889000" />
       <workItem from="1617201507306" duration="283000" />
       <workItem from="1617201810485" duration="6954000" />
+      <workItem from="1618516077677" duration="610000" />
+      <workItem from="1618591138572" duration="1528000" />
+      <workItem from="1618605593437" duration="650000" />
+      <workItem from="1618847523410" duration="4544000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1607981328942</created>
