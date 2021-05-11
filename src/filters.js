@@ -4,7 +4,6 @@ import React, {useContext, useEffect, useState} from "react";
 export const FilterContextProvider = ({children, inputArray}) => {
     const [state, setState] = useState({
         input: inputArray,
-        filters: {},
         filterFunctionsArray: [],
         output: inputArray
     });
@@ -12,20 +11,12 @@ export const FilterContextProvider = ({children, inputArray}) => {
     useEffect(() => {
         let filteredOutput = inputArray;
 
-        if (state.filters.online) {
-            filteredOutput = filteredOutput.filter(item => item.online_event);
-        }
-
-        if (state.filters.soldOut) {
-            filteredOutput = filteredOutput.filter(item => item.sold_out);
-        }
-
         if (state.filterFunctionsArray.length) {
             state.filterFunctionsArray.map(filterFunction => filteredOutput = filteredOutput.filter(item => filterFunction.function(item)));
         }
 
         setState({...state, output: filteredOutput});
-    }, [state.filters,state.filterFunctionsArray.length]);
+    }, [state.filterFunctionsArray.length]);
 
     return (
         <FilterContext.Provider value={[state, setState]}>
