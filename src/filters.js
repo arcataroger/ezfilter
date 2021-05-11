@@ -1,26 +1,31 @@
 /* Context for sharing state across components */
-import React, {useContext, useEffect, useMemo, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 
 export const FilterContextProvider = ({children, inputArray}) => {
     const [state, setState] = useState({
         input: inputArray,
         filters: {},
+        filterFunctionsArray: [],
         output: inputArray
     });
 
     useEffect(() => {
         let filteredOutput = inputArray;
 
-        if(state.filters.online) {
+        if (state.filters.online) {
             filteredOutput = filteredOutput.filter(item => item.online_event);
         }
 
-        if(state.filters.soldOut) {
+        if (state.filters.soldOut) {
             filteredOutput = filteredOutput.filter(item => item.sold_out);
         }
 
+        if (state.filterFunctionsArray.length) {
+            state.filterFunctionsArray.map(filterFunction => filteredOutput = filteredOutput.filter(item => filterFunction.function(item)));
+        }
+
         setState({...state, output: filteredOutput});
-    }, [state.filters]);
+    }, [state.filters,state.filterFunctionsArray.length]);
 
     return (
         <FilterContext.Provider value={[state, setState]}>
@@ -31,57 +36,38 @@ export const FilterContextProvider = ({children, inputArray}) => {
 
 export const FilterContext = React.createContext();
 
-export function OnlineFilter() {
+export const BooleanFilter = ({label, parameterName}) => {
     const [context, setContext] = useContext(FilterContext);
 
-    // Online only
-    const [onlineOnly, setOnlineOnly] = useState(false);
-    const onlineOnlyHandler = () => setOnlineOnly(!onlineOnly);
+    const [booleanState, setBooleanState] = useState(false);
+    const booleanHandler = () => setBooleanState(!booleanState);
+    const filterFunction = (item) => item[parameterName] === booleanState;
 
     useEffect(() => {
         console.log('Current context', context);
-        setContext({...context, filters: {...context.filters, online: onlineOnly}});
+
+        let newFilterFunctionsArray = context.filterFunctionsArray;
+
+        // When the box is unchecked, we don't want to filter ONLY for false, we want to show everything
+        if (booleanState) {
+            newFilterFunctionsArray.push({name: parameterName, function: filterFunction});
+        } else {
+            newFilterFunctionsArray = newFilterFunctionsArray.filter(item => item.name !== parameterName);
+        }
+        setContext({...context, filterFunctionsArray: newFilterFunctionsArray});
         console.log('Modified context', context);
-    }, [onlineOnly]);
+    }, [booleanState]);
 
 
     return (
         <label>
             <input
-                name="onlineOnly"
+                name={parameterName}
                 type="checkbox"
-                checked={onlineOnly}
-                onChange={onlineOnlyHandler}
+                checked={booleanState}
+                onChange={booleanHandler}
             />
-            Online
-        </label>
-    )
-}
-
-export function SoldOutFilter() {
-    const [context, setContext] = useContext(FilterContext);
-
-    // Online only
-    const [soldOut, setSoldOut] = useState(false);
-    const soldOutHandler = () => setSoldOut(!soldOut);
-
-
-    useEffect(() => {
-        console.log('Current context', context);
-        setContext({...context, filters: {...context.filters, soldOut: soldOut}});
-        console.log('Modified context', context);
-    }, [soldOut]);
-
-
-    return (
-        <label>
-            <input
-                name="soldOut"
-                type="checkbox"
-                checked={soldOut}
-                onChange={soldOutHandler}
-            />
-            Sold Out
+            {label}
         </label>
     )
 }
