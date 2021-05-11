@@ -1,13 +1,26 @@
 /* Context for sharing state across components */
 import React, {useContext, useEffect, useMemo, useState} from "react";
 
-export const FilterContext = React.createContext();
-
 export const FilterContextProvider = ({children, inputArray}) => {
     const [state, setState] = useState({
-        filteredData: inputArray,
-        originalData: inputArray
+        input: inputArray,
+        filters: {},
+        output: inputArray
     });
+
+    useEffect(() => {
+        let filteredOutput = inputArray;
+
+        if(state.filters.online) {
+            filteredOutput = filteredOutput.filter(item => item.online_event);
+        }
+
+        if(state.filters.soldOut) {
+            filteredOutput = filteredOutput.filter(item => item.sold_out);
+        }
+
+        setState({...state, output: filteredOutput});
+    }, [state.filters]);
 
     return (
         <FilterContext.Provider value={[state, setState]}>
@@ -16,6 +29,7 @@ export const FilterContextProvider = ({children, inputArray}) => {
     );
 };
 
+export const FilterContext = React.createContext();
 
 export function OnlineFilter() {
     const [context, setContext] = useContext(FilterContext);
@@ -24,11 +38,9 @@ export function OnlineFilter() {
     const [onlineOnly, setOnlineOnly] = useState(false);
     const onlineOnlyHandler = () => setOnlineOnly(!onlineOnly);
 
-
     useEffect(() => {
         console.log('Current context', context);
-        const onlineOnlyEvents = onlineOnly ? context.originalData.filter(event => event.online_event === true) : context.originalData;
-        setContext({...context, filteredData: onlineOnlyEvents});
+        setContext({...context, filters: {...context.filters, online: onlineOnly}});
         console.log('Modified context', context);
     }, [onlineOnly]);
 
@@ -42,6 +54,34 @@ export function OnlineFilter() {
                 onChange={onlineOnlyHandler}
             />
             Online
+        </label>
+    )
+}
+
+export function SoldOutFilter() {
+    const [context, setContext] = useContext(FilterContext);
+
+    // Online only
+    const [soldOut, setSoldOut] = useState(false);
+    const soldOutHandler = () => setSoldOut(!soldOut);
+
+
+    useEffect(() => {
+        console.log('Current context', context);
+        setContext({...context, filters: {...context.filters, soldOut: soldOut}});
+        console.log('Modified context', context);
+    }, [soldOut]);
+
+
+    return (
+        <label>
+            <input
+                name="soldOut"
+                type="checkbox"
+                checked={soldOut}
+                onChange={soldOutHandler}
+            />
+            Sold Out
         </label>
     )
 }

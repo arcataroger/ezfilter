@@ -1,9 +1,9 @@
 import {FilterContext} from "./filters";
 import {useContext} from "react";
 
-const DisplayComponent = () => {
+const FilteredOutput = () => {
     const [context] = useContext(FilterContext);
-    const results = context.filteredData;
+    const results = context.output;
     console.log('Display context', context);
 
     return (
@@ -26,4 +26,4 @@ const DisplayComponent = () => {
     )
 }
 
-export default DisplayComponent;
+export default FilteredOutput;
