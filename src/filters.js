@@ -1,11 +1,13 @@
 /* Context for sharing state across components */
 import React, {useContext, useEffect, useState} from "react";
+import MultiSelect from "react-multi-select-component";
+
 
 export const FilterContextProvider = ({children, inputArray}) => {
     const [state, setState] = useState({
-        input: inputArray,
+        inputArray: inputArray,
         filterFunctionsArray: [],
-        output: inputArray
+        outputArray: inputArray
     });
 
     useEffect(() => {
@@ -15,7 +17,7 @@ export const FilterContextProvider = ({children, inputArray}) => {
             state.filterFunctionsArray.map(filterFunction => filteredOutput = filteredOutput.filter(item => filterFunction.function(item)));
         }
 
-        setState({...state, output: filteredOutput});
+        setState({...state, outputArray: filteredOutput});
     }, [state.filterFunctionsArray.length]);
 
     return (
@@ -27,7 +29,7 @@ export const FilterContextProvider = ({children, inputArray}) => {
 
 export const FilterContext = React.createContext();
 
-export const BooleanFilter = ({label, parameterName}) => {
+export const BooleanFilter = ({parameterName, label}) => {
     const [context, setContext] = useContext(FilterContext);
 
     const [booleanState, setBooleanState] = useState(false);
@@ -39,10 +41,13 @@ export const BooleanFilter = ({label, parameterName}) => {
 
         let newFilterFunctionsArray = context.filterFunctionsArray;
 
-        // When the box is unchecked, we don't want to filter ONLY for false, we want to show everything
         if (booleanState) {
+            // When the box is checked, we add a new filter function to the array
             newFilterFunctionsArray.push({name: parameterName, function: filterFunction});
         } else {
+            // When the box is unchecked, we want to REMOVE this filter from the array, so we filter it out
+            // We do this because (counter-intuitively), the box being unchecked does NOT mean we want to filter for `false
+            // Rather, we'd rather just remove the filter to show everything. The alternative would be a 3-state checkbox
             newFilterFunctionsArray = newFilterFunctionsArray.filter(item => item.name !== parameterName);
         }
         setContext({...context, filterFunctionsArray: newFilterFunctionsArray});
@@ -63,46 +68,56 @@ export const BooleanFilter = ({label, parameterName}) => {
     )
 }
 
-export function MultiSelectFilter() {
-    // From https://www.30secondsofcode.org/react/s/multiselect-checkbox
+export function MultiSelectFilter({parameterName, label}) {
+    const [context, setContext] = useContext(FilterContext);
 
-    /*
-        const [data, setData] = useState(options);
+    const validOptions = new Set();
+    context.inputArray.forEach(item => {
+            if (item[parameterName]) {
+                item[parameterName].forEach(optionName =>
+                    validOptions.add(optionName)
+                )
+            }
+        }
+    );
 
-        const toggle = index => {
-            const newData = [...data];
-            newData.splice(index, 1, {
-                label: data[index].label,
-                checked: !data[index].checked
-            });
-            setData(newData);
-            onChange(newData.filter(x => x.checked));
-        };
+    console.log(parameterName, validOptions);
 
-        return (
-            <>
-                {data.map((item, index) => (
-                    <label key={item.label}>
-                        <input
-                            readOnly
-                            type="checkbox"
-                            checked={item.checked || false}
-                            onClick={() => toggle(index)}
-                        />
-                        {item.label}
-                    </label>
-                ))}
-            </>
-        );
-    */
+    const optionsArray = [];
+    validOptions.forEach(option => optionsArray.push({label: option, value: option}))
+    console.log(parameterName + ' array', optionsArray);
 
-    /*    // Multiselect
-        if (taxonomyFilters.length > 0) {
-            console.log(taxonomyFilters, filteredEvents);
-            filteredEvents = filteredEvents.filter(event =>
-                // Array.some returns true as soon as the condition matches one element of the array, then stops
-                taxonomyFilters.some(selected => event.audience && event.audience.includes(selected.label))
-            )
-        }*/
+    const [selected, setSelected] = useState([]);
 
+
+    // Now we use https://www.npmjs.com/package/react-multi-select-component to display the actual checkboxes
+    const overrideStrings = {
+        // "allItemsAreSelected": "All items are selected.",
+        // "clearSearch": "Clear Search",
+        // "noOptions": "No options",
+        // "search": "Search",
+        // "selectAll": "Select All",
+        "selectSomeItems": label
+    }
+
+    return (
+        <MultiSelect
+            options={optionsArray}
+            value={selected}
+            onChange={setSelected}
+            hasSelectAll={false}
+            disableSearch={true}
+            overrideStrings={overrideStrings}
+        />
+    );
+
+    /*// Multiselect
+    if (taxonomyFilters.length > 0) {
+        console.log(taxonomyFilters, filteredEvents);
+        filteredEvents = filteredEvents.filter(event =>
+            // Array.some returns true as soon as the condition matches one element of the array, then stops
+            taxonomyFilters.some(selected => event.audience && event.audience.includes(selected.label))
+        )
+    }
+*/
 }

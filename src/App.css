@@ -1,16 +1,12 @@
 
-body {
-  background: #444;
-  color: #ccc;
-}
-
-input, input~div {
-  display: inline-block;
-  margin: 0 5px;
-  color: black;
-  font-size: 12pt !important;
-}
-
-input~div > button+div > div > div:first-child {
-  display: none;
+.multi-select {
+  --rmsc-main: #4285f4;
+  --rmsc-hover: #f1f3f5;
+  --rmsc-selected: black;
+  --rmsc-border: black;
+  --rmsc-gray: black;
+  --rmsc-bg: #fff;
+  --rmsc-p: 10px; /* Spacing */
+  --rmsc-radius: 4px; /* Radius */
+  --rmsc-h: 38px; /* Height */
 }

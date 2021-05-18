@@ -3,7 +3,7 @@ import {useContext} from "react";
 
 const FilteredOutput = () => {
     const [context] = useContext(FilterContext);
-    const results = context.output;
+    const results = context.outputArray;
     console.log('Display context', context);
 
     return (

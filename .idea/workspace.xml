@@ -2,8 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="be8296ce-65ab-467d-a35f-534a405f6ee5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FilteredOutput.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/FilteredOutput.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/filters.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/filters.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,7 +126,9 @@
       <workItem from="1618927121290" duration="1796000" />
       <workItem from="1619112059247" duration="1253000" />
       <workItem from="1619216465383" duration="6000" />
-      <workItem from="1620757564163" duration="8118000" />
+      <workItem from="1620757564163" duration="8183000" />
+      <workItem from="1620830656804" duration="26000" />
+      <workItem from="1621353525962" duration="4360000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1607981328942</created>
@@ -291,7 +298,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620768439883</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="Clean up unused old filters">
+      <created>1620768521036</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1620768521036</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -337,7 +351,8 @@
     <MESSAGE value="Basic prototype working! Basically, each filter component only renders the UI and then puts filter status inside the overall context. The actual filter logic lives inside the parent component (in this case, the context provider) instead of in each child filter." />
     <MESSAGE value="Repush" />
     <MESSAGE value="Abstracted boolean logic into a reusable filter function a la Brian (https://codesandbox.io/s/with-filter-display-separated-hsiie?file=/index.js)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Abstracted boolean logic into a reusable filter function a la Brian (https://codesandbox.io/s/with-filter-display-separated-hsiie?file=/index.js)" />
+    <MESSAGE value="Clean up unused old filters" />
+    <option name="LAST_COMMIT_MESSAGE" value="Clean up unused old filters" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
