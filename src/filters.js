@@ -18,8 +18,9 @@ export const FilterContextProvider = ({children, inputArray}) => {
         }
 
         setState({...state, outputArray: filteredOutput});
-    }, [state.filterFunctionsArray.length]);
 
+        console.log('filterFunctionsArray', state.filterFunctionsArray);
+    }, [state.filterFunctionsArray]);
     return (
         <FilterContext.Provider value={[state, setState]}>
             {children}
@@ -30,14 +31,13 @@ export const FilterContextProvider = ({children, inputArray}) => {
 export const FilterContext = React.createContext();
 
 export const BooleanFilter = ({parameterName, label}) => {
-    const [context, setContext] = useContext(FilterContext);
-
     const [booleanState, setBooleanState] = useState(false);
     const booleanHandler = () => setBooleanState(!booleanState);
+
+    const [context, setContext] = useContext(FilterContext);
     const filterFunction = (item) => item[parameterName] === booleanState;
 
     useEffect(() => {
-        console.log('Current context', context);
 
         let newFilterFunctionsArray = context.filterFunctionsArray;
 
@@ -50,8 +50,7 @@ export const BooleanFilter = ({parameterName, label}) => {
             // Rather, we'd rather just remove the filter to show everything. The alternative would be a 3-state checkbox
             newFilterFunctionsArray = newFilterFunctionsArray.filter(item => item.name !== parameterName);
         }
-        setContext({...context, filterFunctionsArray: newFilterFunctionsArray});
-        console.log('Modified context', context);
+        setContext({...context, filterFunctionsArray: [...newFilterFunctionsArray]});
     }, [booleanState]);
 
 
@@ -81,11 +80,8 @@ export function MultiSelectFilter({parameterName, label}) {
         }
     );
 
-    console.log(parameterName, validOptions);
-
     const optionsArray = [];
     validOptions.forEach(option => optionsArray.push({label: option, value: option}))
-    console.log(parameterName + ' array', optionsArray);
 
     const [selected, setSelected] = useState([]);
 
@@ -100,24 +96,33 @@ export function MultiSelectFilter({parameterName, label}) {
         "selectSomeItems": label
     }
 
+
+    const onChangeHandler = (selectedOptions) => {
+        console.log('I am changing', selectedOptions);
+
+        const selectedOptionValues = selectedOptions.map(option => option.value);
+        console.log('selectedOptionValues', selectedOptionValues);
+        const filterFunction = (item) => item[parameterName] && item[parameterName].some(option => selectedOptionValues.includes(option));
+
+        let newFilterFunctionsArray = context.filterFunctionsArray.filter(item => item.name !== parameterName);
+        if (selectedOptionValues.length) {
+            newFilterFunctionsArray.push({name: parameterName, function: filterFunction});
+        }
+
+        setContext({...context, filterFunctionsArray: [...newFilterFunctionsArray]}); // Spread operator ensures a new array is made, rather than updating the reference (not caught by useEffect)
+        console.log('Modified context', context);
+        setSelected(selectedOptions);
+    }
+
     return (
         <MultiSelect
             options={optionsArray}
             value={selected}
-            onChange={setSelected}
+            onChange={onChangeHandler}
             hasSelectAll={false}
             disableSearch={true}
             overrideStrings={overrideStrings}
         />
     );
 
-    /*// Multiselect
-    if (taxonomyFilters.length > 0) {
-        console.log(taxonomyFilters, filteredEvents);
-        filteredEvents = filteredEvents.filter(event =>
-            // Array.some returns true as soon as the condition matches one element of the array, then stops
-            taxonomyFilters.some(selected => event.audience && event.audience.includes(selected.label))
-        )
-    }
-*/
 }
