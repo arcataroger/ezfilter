@@ -2,8 +2,28 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="be8296ce-65ab-467d-a35f-534a405f6ee5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/docs/static/css/main.07aedb7a.chunk.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/static/css/main.07aedb7a.chunk.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/static/js/2.a780ed40.chunk.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/static/js/2.a780ed40.chunk.js.LICENSE.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/static/js/2.a780ed40.chunk.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/static/js/main.ec4aff20.chunk.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/static/js/main.ec4aff20.chunk.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/static/js/runtime-main.fddb8ba3.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/static/js/runtime-main.fddb8ba3.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/filters.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/filters.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/asset-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/asset-manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/static/css/main.3eab5dcb.chunk.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/static/css/main.3eab5dcb.chunk.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/static/js/2.e095684c.chunk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/static/js/2.e095684c.chunk.js.LICENSE.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/static/js/2.e095684c.chunk.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/static/js/main.b9322c64.chunk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/static/js/main.b9322c64.chunk.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/static/js/runtime-main.5a262817.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/static/js/runtime-main.5a262817.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
